@@ -1,10 +1,10 @@
 - id: open_s27_apps
-  label: S27 apps
+  label: Applications
   icon: chart.bar.fill
   type: shell
   command: 'open -a "Microsoft Excel" "/Users/nathanau/Workspace/s27-apps.xlsx"'
 - id: stage_list_new
-  label: Stage list (new)
+  label: Stage list
   icon: display
   type: applescript
   script: |
@@ -13,7 +13,7 @@
       do script "cd ~/Workspace && stage list --new --all"
     end tell
 - id: open_workspace_vscode
-  label: Workspace (VS Code)
+  label: Workspace
   icon: laptopcomputer
   type: shell
   command: 'open -a "Visual Studio Code" "$HOME/Workspace"'
@@ -38,7 +38,7 @@
   type: shell
   command: 'open -a "Spotify"'
 - id: sleep_display
-  label: Sleep display
+  label: Goodnight
   icon: moon.fill
   type: shell
   command: 'pmset displaysleepnow'
