@@ -9,17 +9,22 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
 BASE = Path(__file__).parent
-TOKEN_FILE = BASE / ".token"
+ENV_FILE = BASE / ".env"
 
 app = FastAPI()
 
 
 def load_token():
-    if TOKEN_FILE.exists():
-        return TOKEN_FILE.read_text().strip()
+    # Read TOKEN=... from .env; generate and save one if missing or empty.
+    if ENV_FILE.exists():
+        for line in ENV_FILE.read_text().splitlines():
+            key, sep, value = line.partition("=")
+            if sep and key.strip() == "TOKEN" and value.strip().strip("\"'"):
+                return value.strip().strip("\"'")
     t = secrets.token_urlsafe(24)
-    TOKEN_FILE.write_text(t)
-    TOKEN_FILE.chmod(0o600)
+    with ENV_FILE.open("a") as f:
+        f.write(f"TOKEN={t}\n")
+    ENV_FILE.chmod(0o600)
     return t
 
 
