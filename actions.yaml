@@ -12,3 +12,8 @@
       activate
       do script "cd ~/Workspace && stage list --new --all"
     end tell
+- id: open_workspace_vscode
+  label: Workspace (VS Code)
+  icon: "💻"
+  type: shell
+  command: 'open -a "Visual Studio Code" "$HOME/Workspace"'
