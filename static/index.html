@@ -44,6 +44,21 @@ function show(msg, err) {
   clearTimeout(timer);
   timer = setTimeout(() => toast.className = "", 1500);
 }
+let audio;
+function pop() {
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state === "suspended") audio.resume();
+    const t = audio.currentTime, o = audio.createOscillator(), g = audio.createGain();
+    o.frequency.setValueAtTime(700, t);
+    o.frequency.exponentialRampToValueAtTime(150, t + 0.08);
+    g.gain.setValueAtTime(0.4, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    o.connect(g).connect(audio.destination);
+    o.start(t);
+    o.stop(t + 0.1);
+  } catch (e) {}
+}
 function flash(btn) {
   btn.classList.add("ok");
   clearTimeout(btn._t);
@@ -65,7 +80,7 @@ async function load() {
       b.innerHTML = '<span class="icon"></span><span></span>';
       b.children[0].textContent = a.icon;
       b.children[1].textContent = a.label;
-      b.onclick = () => run(a, b);
+      b.onclick = () => { pop(); run(a, b); };
       grid.appendChild(b);
     }
   } catch (e) { show("Can't reach Mac", true); }
