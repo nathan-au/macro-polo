@@ -13,7 +13,13 @@
   /* Portrait: 2 across the short edge, 4 down the long edge. Landscape reflows to 4 x 2 so it
      is still 2 along the short edge and 4 along the long edge. The pad never rotates. */
   @media (orientation: landscape) { :root { --cols: 4; --rows: 2; } }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  /* .flip: pad rotated 180 degrees for a phone held upside down (long-press anywhere). Insets swap because the
+     rotation is applied to the body after its padding. */
+  html.flip body { transform: rotate(180deg);
+         padding: max(var(--pad), env(safe-area-inset-bottom)) max(var(--pad), env(safe-area-inset-left))
+                  max(var(--pad), env(safe-area-inset-top)) max(var(--pad), env(safe-area-inset-right)); }
+  html.flip #toast { bottom: auto; top: max(30px, env(safe-area-inset-bottom)); }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
   html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   body { margin: 0; color: #fff; font-family: -apple-system, system-ui, sans-serif; background: #0c0c0e;
          height: 100dvh; touch-action: manipulation; -webkit-user-select: none; user-select: none;
@@ -51,6 +57,10 @@
 </style>
 </head>
 <body>
+<script>
+// Apply the saved flip before first paint.
+try { if (localStorage.getItem("flip") === "1") document.documentElement.classList.add("flip"); } catch (e) {}
+</script>
 <div id="grid"></div>
 <div id="toast"></div>
 <script>
@@ -124,6 +134,27 @@ async function load() {
   } catch (e) { show("Can't reach Mac", true); }
 }
 load();
+
+// Holding anywhere (tiles included) for 1 second toggles the 180-degree flip and remembers it.
+let lp, lpFired = false, lpX = 0, lpY = 0;
+function cancelLP() { clearTimeout(lp); }
+document.addEventListener("pointerdown", (e) => {
+  lpFired = false; lpX = e.clientX; lpY = e.clientY;
+  lp = setTimeout(() => {
+    lpFired = true;
+    const on = document.documentElement.classList.toggle("flip");
+    try { localStorage.setItem("flip", on ? "1" : "0"); } catch (err) {}
+  }, 1000);
+});
+document.addEventListener("pointermove", (e) => {
+  if (Math.hypot(e.clientX - lpX, e.clientY - lpY) > 12) cancelLP();  // tolerate finger jitter
+});
+for (const ev of ["pointerup", "pointercancel"]) document.addEventListener(ev, cancelLP);
+// A hold that flipped the pad must not also run the tile under the finger on release.
+document.addEventListener("click", (e) => {
+  if (lpFired) { e.stopPropagation(); e.preventDefault(); lpFired = false; }
+}, true);
+document.addEventListener("contextmenu", (e) => e.preventDefault());
 </script>
 </body>
 </html>
