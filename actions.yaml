@@ -17,3 +17,8 @@
   icon: "💻"
   type: shell
   command: 'open -a "Visual Studio Code" "$HOME/Workspace"'
+- id: portfolio
+  label: Portfolio
+  icon: "📈"
+  type: shell
+  command: 'open "/Users/nathanau/Desktop/Portfolio.command"'
