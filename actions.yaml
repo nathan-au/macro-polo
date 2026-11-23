@@ -1,0 +1,14 @@
+- id: open_s27_apps
+  label: S27 apps
+  icon: "📊"
+  type: shell
+  command: 'open -a "Microsoft Excel" "/Users/nathanau/Workspace/s27-apps.xlsx"'
+- id: stage_list_new
+  label: Stage list (new)
+  icon: "🖥️"
+  type: applescript
+  script: |
+    tell application "Terminal"
+      activate
+      do script "cd ~/Workspace && stage list --new --all"
+    end tell

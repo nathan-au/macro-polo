@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Macros">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json?token=__TOKEN__">
+<title>Macro Pad</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; background: #111; color: #fff; font-family: -apple-system, system-ui, sans-serif;
+         padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  button { aspect-ratio: 1; border: 0; border-radius: 20px; background: #2a2a2e; color: #fff;
+           font-size: 16px; display: flex; flex-direction: column; align-items: center;
+           justify-content: center; gap: 8px; padding: 8px; }
+  button:active { background: #3d3d44; transform: scale(.97); }
+  .icon { font-size: 44px; }
+  #toast { position: fixed; left: 50%; bottom: max(30px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+           background: #2e7d32; padding: 12px 20px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.err { background: #c62828; }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<div id="toast"></div>
+<script>
+const TOKEN = "__TOKEN__";
+const H = { "X-Token": TOKEN };
+const toast = document.getElementById("toast");
+let timer;
+function show(msg, err) {
+  toast.textContent = msg;
+  toast.className = "show" + (err ? " err" : "");
+  clearTimeout(timer);
+  timer = setTimeout(() => toast.className = "", 1500);
+}
+async function run(a) {
+  try {
+    const r = await fetch("/run/" + encodeURIComponent(a.id), { method: "POST", headers: H });
+    if (r.ok) show("Started"); else show("Error: " + ((await r.json()).detail || r.status), true);
+  } catch (e) { show("Can't reach Mac", true); }
+}
+async function load() {
+  try {
+    const actions = await (await fetch("/api/actions", { headers: H })).json();
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    for (const a of actions) {
+      const b = document.createElement("button");
+      b.innerHTML = '<span class="icon"></span><span></span>';
+      b.children[0].textContent = a.icon;
+      b.children[1].textContent = a.label;
+      b.onclick = () => run(a);
+      grid.appendChild(b);
+    }
+  } catch (e) { show("Can't reach Mac", true); }
+}
+load();
+</script>
+</body>
+</html>
