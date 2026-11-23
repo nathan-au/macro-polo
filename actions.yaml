@@ -22,3 +22,18 @@
   icon: "📈"
   type: shell
   command: 'open "/Users/nathanau/Desktop/Portfolio.command"'
+- id: open_firefox
+  label: Firefox
+  icon: "🦊"
+  type: shell
+  command: 'open -a "Firefox"'
+- id: open_notion_calendar
+  label: Notion Calendar
+  icon: "📅"
+  type: shell
+  command: 'open -a "Notion Calendar"'
+- id: open_spotify
+  label: Spotify
+  icon: "🎵"
+  type: shell
+  command: 'open -a "Spotify"'
