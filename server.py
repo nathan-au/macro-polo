@@ -12,6 +12,7 @@ BASE = Path(__file__).parent
 ENV_FILE = BASE / ".env"
 
 app = FastAPI()
+MAX_ACTIONS = 8  # the UI is a fixed 2x4 grid
 
 
 def load_token():
@@ -74,8 +75,12 @@ def manifest():
 @app.get("/api/actions")
 def list_actions():
     return [
-        {"id": a["id"], "label": a.get("label", a["id"]), "icon": a.get("icon", "▶️")}
-        for a in load_actions()
+        {
+            "id": a["id"],
+            "label": a.get("label", a["id"]),
+            "icon": a.get("icon", "▶️"),
+        }
+        for a in load_actions()[:MAX_ACTIONS]
     ]
 
 
