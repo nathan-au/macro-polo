@@ -37,3 +37,8 @@
   icon: "🎵"
   type: shell
   command: 'open -a "Spotify"'
+- id: sleep_display
+  label: Sleep display
+  icon: "🌙"
+  type: shell
+  command: 'pmset displaysleepnow'
