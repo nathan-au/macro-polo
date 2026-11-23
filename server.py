@@ -78,7 +78,7 @@ def list_actions():
         {
             "id": a["id"],
             "label": a.get("label", a["id"]),
-            "icon": a.get("icon", "▶️"),
+            "icon": a.get("icon", "play.fill"),
         }
         for a in load_actions()[:MAX_ACTIONS]
     ]

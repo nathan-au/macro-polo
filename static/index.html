@@ -37,7 +37,10 @@
            box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 2px 5px rgba(0,0,0,.5); }
   button.ok { background: #4caf50; }
   button.empty { background: rgba(255,255,255,.03); box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); pointer-events: none; }
-  .icon { font-size: calc(var(--s) * .3); line-height: 1; }
+  .icon { width: calc(var(--s) * .36); height: calc(var(--s) * .36); color: #fff; }
+  .icon svg { width: 100%; height: 100%; display: block; fill: none; stroke: currentColor;
+              stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .icon svg .f { fill: currentColor; stroke: none; }
   .label { font-size: clamp(11px, calc(var(--s) * .095), 17px); font-weight: 600; letter-spacing: -.01em;
            line-height: 1.15; text-align: center; opacity: .92; max-width: 100%;
            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -60,6 +63,22 @@ function show(msg, err) {
   toast.className = "show" + (err ? " err" : "");
   clearTimeout(timer);
   timer = setTimeout(() => toast.className = "", 1500);
+}
+// SF Symbols can't be used on the web (Apple's licence and no web font), so these are
+// hand-drawn lookalikes keyed by SF Symbol name. Set `icon:` in actions.yaml to one of these.
+const ICONS = {
+  "chart.bar.fill": '<rect class="f" x="4" y="12" width="4" height="8" rx="1"/><rect class="f" x="10" y="4" width="4" height="16" rx="1"/><rect class="f" x="16" y="9" width="4" height="11" rx="1"/>',
+  "display": '<rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8 20.5h8M12 16.5v4"/>',
+  "laptopcomputer": '<rect x="5" y="5" width="14" height="10" rx="1.6"/><path d="M2.5 19h19"/>',
+  "chart.line.uptrend.xyaxis": '<path d="M4 4v16h16"/><path d="M7.5 15l3.5-4 3 3 5-6"/><path d="M15.5 8h3.5v3.5"/>',
+  "globe": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3.2 3 3.2 15 0 18-3.2-3-3.2-15 0-18z"/>',
+  "calendar": '<rect x="4" y="5" width="16" height="15" rx="2.2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+  "music.note": '<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
+  "moon.fill": '<path class="f" d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  "play.fill": '<path class="f" d="M7 4.5v15l12-7.5z"/>',
+};
+function icon(name) {
+  return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || ICONS["play.fill"]) + "</svg>";
 }
 let audio;
 function pop() {
@@ -97,7 +116,7 @@ async function load() {
       const b = document.createElement("button");
       if (!a) { b.className = "empty"; b.disabled = true; grid.appendChild(b); continue; }
       b.innerHTML = '<span class="icon"></span><span class="label"></span>';
-      b.children[0].textContent = a.icon;
+      b.children[0].innerHTML = icon(a.icon);
       b.children[1].textContent = a.label;
       b.onclick = () => { pop(); run(a, b); };
       grid.appendChild(b);

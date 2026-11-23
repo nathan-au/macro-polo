@@ -1,11 +1,11 @@
 - id: open_s27_apps
   label: S27 apps
-  icon: "📊"
+  icon: chart.bar.fill
   type: shell
   command: 'open -a "Microsoft Excel" "/Users/nathanau/Workspace/s27-apps.xlsx"'
 - id: stage_list_new
   label: Stage list (new)
-  icon: "🖥️"
+  icon: display
   type: applescript
   script: |
     tell application "Terminal"
@@ -14,31 +14,31 @@
     end tell
 - id: open_workspace_vscode
   label: Workspace (VS Code)
-  icon: "💻"
+  icon: laptopcomputer
   type: shell
   command: 'open -a "Visual Studio Code" "$HOME/Workspace"'
 - id: portfolio
   label: Portfolio
-  icon: "📈"
+  icon: chart.line.uptrend.xyaxis
   type: shell
   command: 'open "/Users/nathanau/Desktop/Portfolio.command"'
 - id: open_firefox
   label: Firefox
-  icon: "🦊"
+  icon: globe
   type: shell
   command: 'open -a "Firefox"'
 - id: open_notion_calendar
   label: Notion Calendar
-  icon: "📅"
+  icon: calendar
   type: shell
   command: 'open -a "Notion Calendar"'
 - id: open_spotify
   label: Spotify
-  icon: "🎵"
+  icon: music.note
   type: shell
   command: 'open -a "Spotify"'
 - id: sleep_display
   label: Sleep display
-  icon: "🌙"
+  icon: moon.fill
   type: shell
   command: 'pmset displaysleepnow'
