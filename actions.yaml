@@ -23,10 +23,13 @@
   type: shell
   command: 'open "/Users/nathanau/Desktop/Portfolio.command"'
 - id: open_firefox
-  label: Firefox
-  icon: globe
-  type: shell
-  command: 'open -a "Firefox"'
+  label: Email
+  icon: envelope
+  type: applescript
+  script: |
+    tell application "Firefox" to activate
+    delay 0.3
+    tell application "System Events" to keystroke "1" using command down
 - id: open_notion_calendar
   label: Notion Calendar
   icon: calendar
