@@ -97,13 +97,16 @@ function pop() {
     audio = audio || new (window.AudioContext || window.webkitAudioContext)();
     if (audio.state === "suspended") audio.resume();
     const t = audio.currentTime, o = audio.createOscillator(), g = audio.createGain();
-    o.frequency.setValueAtTime(700, t);
-    o.frequency.exponentialRampToValueAtTime(150, t + 0.08);
-    g.gain.setValueAtTime(0.4, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    // short rising bubble pop (modelled on Minecraft's item pickup): ~430Hz -> ~1100Hz in 20ms, ~50ms decay
+    o.type = "sine";
+    o.frequency.setValueAtTime(430, t);
+    o.frequency.exponentialRampToValueAtTime(1100, t + 0.02);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.1, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
     o.connect(g).connect(audio.destination);
     o.start(t);
-    o.stop(t + 0.1);
+    o.stop(t + 0.07);
   } catch (e) {}
 }
 function flash(btn) {
