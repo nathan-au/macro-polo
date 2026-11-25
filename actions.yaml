@@ -31,7 +31,7 @@
     delay 0.3
     tell application "System Events" to keystroke "1" using command down
 - id: open_notion_calendar
-  label: Notion Calendar
+  label: Calendar
   icon: calendar
   type: shell
   command: 'open -a "Notion Calendar"'
