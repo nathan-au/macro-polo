@@ -3,15 +3,11 @@
   icon: chart.bar.fill
   type: shell
   command: 'open -a "Microsoft Excel" "/Users/nathanau/Workspace/s27-apps.xlsx"'
-- id: stage_list_new
-  label: Stage list
-  icon: display
-  type: applescript
-  script: |
-    tell application "Terminal"
-      activate
-      do script "cd ~/Workspace && stage list --new --all"
-    end tell
+- id: open_cmux
+  label: cmux
+  icon: terminal
+  type: shell
+  command: 'open -a "cmux"'
 - id: open_workspace_vscode
   label: Workspace
   icon: laptopcomputer
